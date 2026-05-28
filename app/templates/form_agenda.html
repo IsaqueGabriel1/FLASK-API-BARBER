@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Black & White - Agendamento</title>
+    <style>
+        /* --- RESET E VARIÁVEIS --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --cor-principal: #000000;
+            --cor-secundaria: #ffffff;
+            --cor-cinza-escura: #121212;
+            --cor-cinza-clara: #222222;
+            --cor-texto-mutado: #a0a0a0;
+        }
+
+        body {
+            background-color: var(--cor-principal);
+            color: var(--cor-secundaria);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER E NAV RESPONSIVO --- */
+        header {
+            background-color: var(--cor-cinza-escura);
+            border-bottom: 1px solid var(--cor-cinza-clara);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--cor-secundaria);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            color: var(--cor-texto-mutado);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--cor-secundaria);
+            transition: 0.3s;
+        }
+
+        /* --- CONTAINER DO AGENDAMENTO --- */
+        .main-container {
+            max-width: 1200px;
+            margin: 100px auto 40px auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: calc(100vh - 140px);
+            justify-content: center;
+        }
+
+        .titulo-pagina {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        /* --- CARD DO FORMULÁRIO --- */
+        .agendamento-card {
+            background-color: var(--cor-cinza-escura);
+            border: 1px solid var(--cor-cinza-clara);
+            padding: 30px 20px;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 550px; /* Um pouco mais largo para acomodar bem as opções */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .passo-grupo {
+            margin-bottom: 25px;
+        }
+
+        .passo-grupo label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--cor-texto-mutado);
+            font-weight: bold;
+        }
+
+        /* --- COMPONENTE CUSTOMIZADO: SELECT DE BARBEIROS --- */
+        .select-barbeiro-custom {
+            position: relative;
+            width: 100%;
+        }
+
+        .barbeiro-selecionado {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background-color: var(--cor-principal);
+            border: 1px solid var(--cor-cinza-clara);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .barbeiro-selecionado::after {
+            content: '▼';
+            font-size: 0.8rem;
+            margin-left: auto;
+            color: var(--cor-texto-mutado);
+            transition: transform 0.3s;
+        }
+
+        .select-barbeiro-custom.aberto .barbeiro-selecionado::after {
+            transform: rotate(180deg);
+        }
+
+        .lista-barbeiros {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: var(--cor-cinza-escura);
+            border: 1px solid var(--cor-cinza-clara);
+            border-top: none;
+            z-index: 10;
+            list-style: none;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .select-barbeiro-custom.aberto .lista-barbeiros {
+            display: block;
+        }
+
+        .item-barbeiro {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .item-barbeiro:hover {
+            background-color: var(--cor-cinza-clara);
+        }
+
+        .avatar-barbeiro {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid var(--cor-secundaria);
+            background-color: #333;
+        }
+
+        .nome-barbeiro {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        /* --- SELECT PADRÃO PERSONALIZADO (SERVIÇOS) --- */
+        .select-padrao {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--cor-principal);
+            border: 1px solid var(--cor-cinza-clara);
+            color: var(--cor-secundaria);
+            font-size: 1rem;
+            border-radius: 0;
+            cursor: pointer;
+            appearance: none; /* Remove seta padrão do navegador */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+
+        .select-padrao:focus {
+            outline: none;
+            border-color: var(--cor-secundaria);
+        }
+
+        /* --- INPUT DE DATA --- */
+        .input-data {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--cor-principal);
+            border: 1px solid var(--cor-cinza-clara);
+            color: var(--cor-secundaria);
+            font-size: 1rem;
+            border-radius: 0;
+            color-scheme: dark; /* Faz o calendário nativo abrir em modo escuro no celular/PC */
+        }
+
+        .input-data:focus {
+            outline: none;
+            border-color: var(--cor-secundaria);
+        }
+
+        /* --- BOTÃO CONFIRMAR --- */
+        .btn-confirmar {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--cor-secundaria);
+            color: var(--cor-principal);
+            border: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-confirmar:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* ==========================================================================
+           MEDIA QUERIES (RESPONSIVIDADE)
+           ========================================================================== */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: var(--cor-cinza-escura);
+                border-bottom: 1px solid var(--cor-cinza-clara);
+                padding: 20px;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .titulo-pagina {
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .agendamento-card {
+                padding: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <h1>Barber.BW</h1>
+            </div>
+            
+            <button class="menu-toggle" id="mobile-menu" aria-label="Abrir Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav>
+                <ul class="nav-links" id="nav-list">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Serviços</a></li>
+                    <li><a href="#">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        
+        <h2 class="titulo-pagina">Agende seu Horário</h2>
+
+        <section class="agendamento-card">
+            <form action="#" method="POST" id="form-agendamento">
+                
+                <div class="passo-grupo">
+                    <label>1º Passo: Selecione o Profissional</label>
+                    <div class="select-barbeiro-custom" id="custom-select">
+                        
+                        <div class="barbeiro-selecionado" id="select-gatilho">
+                            <span id="label-selecionado">Clique para escolher um barbeiro</span>
+                        </div>
+                        
+                        <ul class="lista-barbeiros">
+                            <li class="item-barbeiro" data-valor="Carlos">
+                                <img src="https://via.placeholder.com/150/ffffff/000000?text=Carlos" alt="Carlos" class="avatar-barbeiro">
+                                <span class="nome-barbeiro">Carlos (Especialista em Degradê)</span>
+                            </li>
+                            <li class="item-barbeiro" data-valor="Rodrigo">
+                                <img src="https://via.placeholder.com/150/ffffff/000000?text=Rodrigo" alt="Rodrigo" class="avatar-barbeiro">
+                                <span class="nome-barbeiro">Rodrigo (Mestre da Barba)</span>
+                            </li>
+                            <li class="item-barbeiro" data-valor="Junior">
+                                <img src="https://via.placeholder.com/150/ffffff/000000?text=Junior" alt="Junior" class="avatar-barbeiro">
+                                <span class="nome-barbeiro">Junior (Cortes Clássicos)</span>
+                            </li>
+                        </ul>
+
+                        <input type="hidden" name="barbeiro" id="input-barbeiro-hidden" required>
+                    </div>
+                </div>
+
+                <div class="passo-grupo">
+                    <label for="servico">2º Passo: Escolha o Serviço</label>
+                    <select id="servico" name="servico" class="select-padrao" required>
+                        <option value="" disabled selected hidden>Selecione um serviço...</option>
+                        <option value="corte">Corte</option>
+                        <option value="barba">Barba</option>
+                        <option value="corte-barba">Corte e Barba</option>
+                        <option value="pezinho">Pezinho</option>
+                    </select>
+                </div>
+
+                <div class="passo-grupo">
+                    <label for="data">3º Passo: Escolha a Data</label>
+                    <input type="date" id="data" name="data" class="input-data" required>
+                </div>
+
+                <button type="submit" class="btn-confirmar">Confirmar Agendamento</button>
+
+            </form>
+        </section>
+
+    </main>
+
+    <script>
+        // --- CONTROLE DO MENU HAMBÚRGUER ---
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
+
+        mobileMenu.addEventListener('click', () => {
+            navList.classList.toggle('active');
+        });
+
+        // --- CONTROLE DO SELECT CUSTOMIZADO DE BARBEIRO ---
+        const customSelect = document.getElementById('custom-select');
+        const selectGatilho = document.getElementById('select-gatilho');
+        const labelSelecionado = document.getElementById('label-selecionado');
+        const inputHidden = document.getElementById('input-barbeiro-hidden');
+        const itensBarbeiro = document.querySelectorAll('.item-barbeiro');
+
+        // Abre / Fecha a lista ao clicar na caixa principal
+        selectGatilho.addEventListener('click', () => {
+            customSelect.classList.toggle('aberto');
+        });
+
+        // Seleciona o barbeiro da lista
+        itensBarbeiro.forEach(item => {
+            item.addEventListener('click', function() {
+                // Pega a foto e o nome clicados
+                const nome = this.querySelector('.nome-barbeiro').innerText;
+                const imgSrc = this.querySelector('.avatar-barbeiro').src;
+                const valor = this.getAttribute('data-valor');
+
+                // Atualiza a caixa principal com a foto e o nome do barbeiro escolhido
+                labelSelecionado.innerHTML = `<img src="${imgSrc}" class="avatar-barbeiro" style="width:30px; height:30px;"> <span>${nome}</span>`;
+                
+                // Grava o valor no input escondido para enviar via POST/Formulário
+                inputHidden.value = valor;
+
+                // Fecha a lista
+                customSelect.classList.remove('aberto');
+            });
+        });
+
+        // Fecha a lista se o usuário clicar em qualquer outro lugar fora dela
+        window.addEventListener('click', function(e) {
+            if (!customSelect.contains(e.target)) {
+                customSelect.classList.remove('aberto');
+            }
+        });
+    </script>
+
+</body>
+</html>
