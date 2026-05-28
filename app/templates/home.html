@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Black & White</title>
+    <style>
+        /* --- RESET E VARIÁVEIS --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --cor-principal: #000000;
+            --cor-secundaria: #ffffff;
+            --cor-cinza-escura: #121212;
+            --cor-cinza-clara: #222222;
+            --cor-texto-mutado: #a0a0a0;
+        }
+
+        body {
+            background-color: var(--cor-principal);
+            color: var(--cor-secundaria);
+            line-height: 1.6;
+            overflow-x: hidden; /* Evita barra de rolagem horizontal indesejada */
+        }
+
+        /* --- HEADER E NAV RESPONSIVO --- */
+        header {
+            background-color: var(--cor-cinza-escura);
+            border-bottom: 1px solid var(--cor-cinza-clara);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo h1 {
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        /* Menu para telas maiores */
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--cor-secundaria);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .nav-links a:hover {
+            color: var(--cor-texto-mutado);
+        }
+
+        /* Botão Menu Hambúrguer (Oculto por padrão) */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--cor-secundaria);
+            transition: 0.3s;
+        }
+
+        /* --- LAYOUT DO CONTEÚDO PRINCIPAL --- */
+        .main-container {
+            max-width: 1200px;
+            margin: 80px auto 40px auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Padrão celular: empilhado */
+            gap: 40px;
+            min-height: calc(100vh - 120px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- HERO TEXT (TEXTO DE BOAS-VINDAS) --- */
+        .hero-text {
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .hero-text h2 {
+            font-size: 2.2rem;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-text p {
+            color: var(--cor-texto-mutado);
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+        .btn-agendar {
+            background-color: var(--cor-secundaria);
+            color: var(--cor-principal);
+            padding: 12px 28px;
+            border: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            width: 100%; /* Botão largo no celular para facilitar o clique */
+            max-width: 280px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn-agendar:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* --- CARD DE LOGIN --- */
+        .login-card {
+            background-color: var(--cor-cinza-escura);
+            border: 1px solid var(--cor-cinza-clara);
+            padding: 30px 20px;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 400px; /* Não deixa o card esticar demais em telas grandes */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .login-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .login-card p {
+            color: var(--cor-texto-mutado);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--cor-texto-mutado);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--cor-principal);
+            border: 1px solid var(--cor-cinza-clara);
+            color: var(--cor-secundaria);
+            font-size: 1rem;
+            border-radius: 0; /* Remove cantos arredondados nativos do iOS */
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--cor-secundaria);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--cor-secundaria);
+            color: var(--cor-principal);
+            border: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .login-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .login-footer a {
+            color: var(--cor-secundaria);
+        }
+
+        /* ==========================================================================
+           MEDIA QUERIES (A MÁGICA DA RESPONSIVIDADE)
+           ========================================================================== */
+
+        /* 1. Telas Médias e Celulares em Modo Paisagem (Tablets deitados / Celulares Grandes) */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex; /* Exibe o botão hambúrguer */
+            }
+
+            .nav-links {
+                display: none; /* Esconde o menu padrão */
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: var(--cor-cinza-escura);
+                border-bottom: 1px solid var(--cor-cinza-clara);
+                padding: 20px;
+                text-align: center;
+                gap: 15px;
+            }
+
+            /* Classe que o JavaScript vai ativar ao clicar no hambúrguer */
+            .nav-links.active {
+                display: flex;
+            }
+        }
+
+        /* 2. Telas Grandes (Notebooks e Desktops) */
+        @media (min-width: 769px) {
+            .main-container {
+                flex-direction: row; /* Coloca texto e login lado a lado */
+                justify-content: space-between;
+            }
+
+            .hero-text {
+                text-align: left;
+                max-width: 50%;
+            }
+
+            .hero-text h2 {
+                font-size: 3.5rem;
+            }
+
+            .btn-agendar {
+                width: auto; /* Botão volta ao tamanho normal */
+            }
+
+            .login-card {
+                padding: 40px;
+            }
+        }
+
+        /* 3. Ajuste para telas muito pequenas (ex: iPhone SE antigo ou relógios) */
+        @media (max-width: 360px) {
+            .hero-text h2 {
+                font-size: 1.8rem;
+            }
+            .login-card {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <h1>Barber.BW</h1>
+            </div>
+            
+            <button class="menu-toggle" id="mobile-menu" aria-label="Abrir Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav>
+                <ul class="nav-links" id="nav-list">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Serviços</a></li>
+                    <li><a href="#">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        
+        <section class="hero-text">
+            <h2>Estilo &amp; <br>Tradição</h2>
+            <p>Mais que um corte, uma experiência. Agende seu horário ou faça login para gerenciar suas reservas com os melhores profissionais da região.</p>
+            <button class="btn-agendar">Conhecer Serviços</button>
+        </section>
+
+        <section class="login-card">
+            <h3>Acessar Conta</h3>
+            <p>Entre para gerenciar seus agendamentos</p>
+            
+            <form action="/" method="POST">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn-login">Entrar</button>
+            </form>
+            
+            <div class="login-footer">
+                <p>Não tem conta? <a href="#">Cadastre-se</a></p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
+
+        mobileMenu.addEventListener('click', () => {
+            navList.classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>
