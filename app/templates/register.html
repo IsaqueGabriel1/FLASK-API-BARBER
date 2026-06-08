@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Black & White - Cadastro</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root{ --cor-principal:#000; --cor-secundaria:#fff; --cor-cinza-escura:#121212; --cor-cinza-clara:#222222; --cor-texto-mutado:#a0a0a0; }
+        body{ background:var(--cor-principal); color:var(--cor-secundaria); line-height:1.6; overflow-x:hidden; }
+        header{ background:var(--cor-cinza-escura); border-bottom:1px solid var(--cor-cinza-clara); position:fixed; width:100%; top:0; z-index:1000; }
+        .nav-container{ max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; padding:15px 20px; }
+        .logo h1{ font-size:1.3rem; letter-spacing:2px; font-weight:800; text-transform:uppercase; }
+        .nav-links{ display:flex; list-style:none; gap:20px; }
+        .nav-links a{ color:var(--cor-secundaria); text-decoration:none; font-weight:500; transition:color .3s; font-size:.9rem; text-transform:uppercase; }
+        .nav-links a:hover{ color:var(--cor-texto-mutado); }
+        .menu-toggle{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; }
+        .menu-toggle span{ display:block; width:25px; height:3px; background:var(--cor-secundaria); transition:0.3s; }
+        .main-container{ max-width:1200px; margin:100px auto 40px auto; padding:20px; display:flex; flex-direction:column; gap:40px; min-height:calc(100vh - 140px); justify-content:center; align-items:center; }
+        .titulo-pagina{ text-align:center; text-transform:uppercase; letter-spacing:2px; margin-bottom:10px; font-size:2rem; }
+        .card{ background:var(--cor-cinza-escura); border:1px solid var(--cor-cinza-clara); padding:30px 20px; border-radius:4px; width:100%; max-width:480px; box-shadow:0 10px 25px rgba(0,0,0,0.5); }
+        .card h3{ font-size:1.4rem; margin-bottom:8px; text-align:center; text-transform:uppercase; }
+        .card p{ color:var(--cor-texto-mutado); text-align:center; margin-bottom:18px; font-size:.95rem; }
+        .form-group{ margin-bottom:15px; }
+        .form-group label{ display:block; margin-bottom:6px; font-size:.85rem; text-transform:uppercase; color:var(--cor-texto-mutado); }
+        .form-group input{ width:100%; padding:12px; background:var(--cor-principal); border:1px solid var(--cor-cinza-clara); color:var(--cor-secundaria); font-size:1rem; }
+        .form-group input:focus{ outline:none; border-color:var(--cor-secundaria); }
+        .btn-primary{ width:100%; padding:12px; background:var(--cor-secundaria); color:var(--cor-principal); border:none; font-weight:700; text-transform:uppercase; cursor:pointer; }
+        .small-link{ margin-top:12px; text-align:center; font-size:.9rem; }
+        .small-link a{ color:var(--cor-secundaria); }
+        @media (max-width:768px){ .menu-toggle{ display:flex; } .nav-links{ display:none; flex-direction:column; position:absolute; top:60px; left:0; width:100%; background:var(--cor-cinza-escura); border-bottom:1px solid var(--cor-cinza-clara); padding:20px; text-align:center; gap:15px; } .nav-links.active{ display:flex; } .titulo-pagina{ font-size:1.6rem; } }
+        @media (min-width:769px){ .main-container{ flex-direction:row; } .titulo-pagina{ text-align:left; max-width:50%; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo"><h1>Barber.BW</h1></div>
+            <button class="menu-toggle" id="mobile-menu" aria-label="Abrir Menu"><span></span><span></span><span></span></button>
+            <nav><ul class="nav-links" id="nav-list"><li><a href="/">Home</a></li><li><a href="#">Serviços</a></li><li><a href="#">Contato</a></li></ul></nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section style="max-width:600px;">
+            <h2 class="titulo-pagina">Crie sua conta</h2>
+            <p style="color:var(--cor-texto-mutado); max-width:520px;">Cadastre-se para gerenciar agendamentos, acompanhar históricos e muito mais.</p>
+        </section>
+
+        <section class="card">
+            <h3>Cadastro</h3>
+            <p>Preencha os dados abaixo</p>
+            <form action="/usuarios" method="POST" id="form-cadastro">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary">Cadastrar</button>
+            </form>
+            <div class="small-link"><p>Já tem conta? <a href="/">Entrar</a></p></div>
+        </section>
+    </main>
+
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
+        mobileMenu.addEventListener('click', () => { navList.classList.toggle('active'); });
+
+        // Optional: simple client-side submit handling to show a basic success message without redirect
+        const form = document.getElementById('form-cadastro');
+        form.addEventListener('submit', function(e){
+            // let browser perform POST; could implement fetch for SPA behavior
+        });
+    </script>
+</body>
+</html>
